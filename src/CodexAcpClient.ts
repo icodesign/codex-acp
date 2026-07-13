@@ -758,6 +758,12 @@ export class CodexAcpClient {
             cursor: request.cursor ?? null,
             modelProviders: modelProviders,
             sourceKinds: sourceKinds,
+            ...(requestedCwd && path.isAbsolute(requestedCwd)
+                ? {
+                    cwd: requestedCwd,
+                    useStateDbOnly: true,
+                }
+                : {}),
         });
 
         const mapThreadToSession = (thread: Thread) => ({
@@ -767,7 +773,7 @@ export class CodexAcpClient {
             updatedAt: new Date(thread.updatedAt * 1000).toISOString(),
         });
 
-        if (listResponse.data.length === 0) {
+        if (listResponse.data.length === 0 && requestedCwd === null) {
             const diagnostics = await this.runSessionListDiagnostics();
             logger.log("Session list diagnostics", diagnostics);
         }

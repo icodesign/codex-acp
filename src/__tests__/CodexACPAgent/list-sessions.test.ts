@@ -83,6 +83,8 @@ describe("CodexACPAgent - list sessions", () => {
                 "appServer",
                 "unknown",
             ],
+            cwd: "/repo/project",
+            useStateDbOnly: true,
         }));
         await expect(JSON.stringify(response, null, 2)).toMatchFileSnapshot(
             "data/list-sessions.json"
